@@ -10,4 +10,3 @@ const String serverUrlPrefix = 'https://gymshare-production.up.railway.app/';
 String buildUrl(String endpointName) => '$serverUrlPrefix$endpointName';
 
 const mobileWidth = 480.0;
-const tableWidth = 801.0;

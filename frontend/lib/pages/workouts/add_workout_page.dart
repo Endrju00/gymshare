@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gymshare/api/models/workout.dart';
@@ -11,6 +12,7 @@ import 'package:gymshare/components/widgets/rounded_rectangle_button.dart';
 import 'package:gymshare/components/widgets/scroll_configuration.dart';
 import 'package:gymshare/components/widgets/seamless_pattern.dart';
 import 'package:gymshare/settings/colors.dart';
+import 'package:gymshare/settings/settings.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -164,101 +166,118 @@ class _AddWorkoutPageState extends State<AddWorkoutPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: SeamlessPattern(
-        
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: secondaryColor,
-            title: const Text('Create new workout plan'),
-          ),
-          backgroundColor: Colors.transparent,
-          body: Form(
-            key: _formKey,
-            child: ScrollConfig(
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      CustomTextFormField(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        controller: _titleController,
-                        labelText: 'Title',
-                        validator: _validateInput,
-                      ),
-                      CustomLargeTextFormField(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        controller: _descriptionController,
-                        labelText: 'Description',
-                        validator: _validateInput,
-                      ),
-                      ((!_editMode && _image == null) ||
-                              (_editMode &&
-                                  widget.workout!.thumbnailUrl == null &&
-                                  _image == null))
-                          ? RoundedRectangleButton(
+        child: Center(
+          child: Container(
+            decoration: BoxDecoration(
+                border: kIsWeb ? Border.all(color: secondaryColor) : null),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: mobileWidth),
+              child: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: secondaryColor,
+                  title: const Text('Create new workout plan'),
+                ),
+                backgroundColor: Colors.transparent,
+                body: Form(
+                  key: _formKey,
+                  child: ScrollConfig(
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            CustomTextFormField(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 16.0),
-                              borderColor: secondaryColor,
-                              onPress: _chooseImageSource,
-                              child: const Text('Upload an image'),
-                            )
-                          : buildThumbnail(),
-                      buildSwitches(),
-                      if (!_editMode)
-                        RoundedRectangleButton(
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          isButtonDisabled: _isButtonDisabled,
-                          child: const Text(
-                            'Save workout',
-                            style: TextStyle(
-                                color: primaryTextColor, fontSize: 16),
-                          ),
-                          onPress: () async {
-                            final isValid = _formKey.currentState!.validate();
-                            if (isValid) {
-                              setState(() => _isButtonDisabled = true);
-                              if (await _createWorkout()) {
-                                Navigator.of(context).pop();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  getInfoSnackBar(
-                                    text: 'Workout has been created.',
-                                  ),
-                                );
-                              } else {
-                                setState(() => _isButtonDisabled = false);
-                              }
-                            }
-                          },
+                              controller: _titleController,
+                              labelText: 'Title',
+                              validator: _validateInput,
+                            ),
+                            CustomLargeTextFormField(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 16.0),
+                              controller: _descriptionController,
+                              labelText: 'Description',
+                              validator: _validateInput,
+                            ),
+                            ((!_editMode && _image == null) ||
+                                    (_editMode &&
+                                        widget.workout!.thumbnailUrl == null &&
+                                        _image == null))
+                                ? RoundedRectangleButton(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16.0),
+                                    borderColor: secondaryColor,
+                                    onPress: _chooseImageSource,
+                                    child: const Text('Upload an image'),
+                                  )
+                                : buildThumbnail(),
+                            buildSwitches(),
+                            if (!_editMode)
+                              RoundedRectangleButton(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16.0),
+                                isButtonDisabled: _isButtonDisabled,
+                                child: const Text(
+                                  'Save workout',
+                                  style: TextStyle(
+                                      color: primaryTextColor, fontSize: 16),
+                                ),
+                                onPress: () async {
+                                  final isValid =
+                                      _formKey.currentState!.validate();
+                                  if (isValid) {
+                                    setState(() => _isButtonDisabled = true);
+                                    if (await _createWorkout()) {
+                                      Navigator.of(context).pop();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        getInfoSnackBar(
+                                          text: 'Workout has been created.',
+                                        ),
+                                      );
+                                    } else {
+                                      setState(() => _isButtonDisabled = false);
+                                    }
+                                  }
+                                },
+                              ),
+                            if (_editMode)
+                              RoundedRectangleButton(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16.0),
+                                isButtonDisabled: _isButtonDisabled,
+                                child: const Text(
+                                  'Edit workout',
+                                  style: TextStyle(
+                                      color: primaryTextColor, fontSize: 16),
+                                ),
+                                onPress: () async {
+                                  final isValid =
+                                      _formKey.currentState!.validate();
+                                  if (isValid) {
+                                    setState(() => _isButtonDisabled = true);
+                                    if (await editWorkout(
+                                        data, context, mounted)) {
+                                      Navigator.of(context).pop(data);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        getInfoSnackBar(
+                                          text: 'Workout has been edited.',
+                                        ),
+                                      );
+                                    } else {
+                                      setState(() => _isButtonDisabled = false);
+                                    }
+                                  }
+                                },
+                              ),
+                            const SizedBox(height: 30),
+                          ],
                         ),
-                      if (_editMode)
-                        RoundedRectangleButton(
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          isButtonDisabled: _isButtonDisabled,
-                          child: const Text(
-                            'Edit workout',
-                            style: TextStyle(
-                                color: primaryTextColor, fontSize: 16),
-                          ),
-                          onPress: () async {
-                            final isValid = _formKey.currentState!.validate();
-                            if (isValid) {
-                              setState(() => _isButtonDisabled = true);
-                              if (await editWorkout(data, context, mounted)) {
-                                Navigator.of(context).pop(data);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  getInfoSnackBar(
-                                    text: 'Workout has been edited.',
-                                  ),
-                                );
-                              } else {
-                                setState(() => _isButtonDisabled = false);
-                              }
-                            }
-                          },
-                        ),
-                      const SizedBox(height: 30),
-                    ],
+                      ),
+                    ),
                   ),
                 ),
               ),

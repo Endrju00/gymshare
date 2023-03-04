@@ -25,13 +25,13 @@ class _TrainingPageState extends State<TrainingPage> {
 
   void fetchWorkouts({bool next = false, String query = ''}) async {
     if (next && _apiResponse.next != null || !next) {
-      _apiResponse =
-          await searchWorkouts(context, query, mounted, next ? _apiResponse.next : null);
+      _apiResponse = await searchWorkouts(
+          context, query, mounted, next ? _apiResponse.next : null);
       workouts.clear();
       setState(() => {
-      workouts.addAll(List<Workout>.from(
-          _apiResponse.results.map((w) => Workout.fromJson(w))))
-      });
+            workouts.addAll(List<Workout>.from(
+                _apiResponse.results.map((w) => Workout.fromJson(w))))
+          });
     }
   }
 
@@ -40,12 +40,12 @@ class _TrainingPageState extends State<TrainingPage> {
     super.initState();
     _controller = TextEditingController();
     _controller.addListener(() {
-      if (_controller.text.isEmpty){
+      if (_controller.text.isEmpty) {
         setState(() {
           workouts.clear();
         });
       }
-     });
+    });
   }
 
   @override
@@ -60,74 +60,69 @@ class _TrainingPageState extends State<TrainingPage> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
-        child: Center(
+        child: Align(
+          alignment: Alignment.center,
           child: Padding(
-            padding: const EdgeInsets.all(8.0), 
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start, 
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 10.0),
-                  child: const Text(
-                    'Workout not started',
-                    style: TextStyle(fontSize: 30, color: primaryTextColor),
-                  ),
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 8),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 10.0),
+                child: const Text(
+                  'Workout not started',
+                  style: TextStyle(fontSize: 30, color: primaryTextColor),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 10.0),
-                  child: const Text(
-                    'Pick your workout',
-                    style: TextStyle(fontSize: 24, color: primaryTextColor),
-                  ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 10.0),
+                child: const Text(
+                  'Pick your workout',
+                  style: TextStyle(fontSize: 24, color: primaryTextColor),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 1.0),
-                  child: TextField(
-                    controller: _controller,
-                    onChanged: (value) {
-                      if (value.isNotEmpty){
-                        fetchWorkouts(query: value);
-                      } else {
-                        setState(() {
-                          workouts.clear();
-                        });
-                      }
-                    },
-                    decoration: InputDecoration(
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 1.0),
+                child: TextField(
+                  controller: _controller,
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      fetchWorkouts(query: value);
+                    } else {
+                      setState(() {
+                        workouts.clear();
+                      });
+                    }
+                  },
+                  decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       labelText: 'Workout',
                       suffixIcon: IconButton(
                         onPressed: _controller.clear,
                         icon: const Icon(Icons.clear),
-                      )
-                    ),
-                    style: const TextStyle(
-                        color: primaryTextColor
-                      ),
-                  ),
+                      )),
+                  style: const TextStyle(color: primaryTextColor),
                 ),
-                Expanded(
+              ),
+              Expanded(
                   child: SizedBox(
-                    height: 100.0,
-                    width: double.infinity,
-                    child: ListView.builder(
-                      controller: scrollController,
-                      itemCount: workouts.length,
-                      itemBuilder: (context, index){
-                        return SearchTile(workout: workouts[index], callback: widget.callback);
-                      },
-                    ),
-                  )
-                )
-              ]
-            ),
+                height: 100.0,
+                width: double.infinity,
+                child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: workouts.length,
+                  itemBuilder: (context, index) {
+                    return SearchTile(
+                        workout: workouts[index], callback: widget.callback);
+                  },
+                ),
+              ))
+            ]),
           ),
         ),
       ),
     );
   }
 }
-
 
 class SearchTile extends StatefulWidget {
   final Workout workout;
@@ -152,23 +147,18 @@ class _SearchTileState extends State<SearchTile> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-          onTap: () {
-            showMyDialog(context, widget.workout, widget.callback);
-          },
-          child: Container(
+        onTap: () {
+          showMyDialog(context, widget.workout, widget.callback);
+        },
+        child: Container(
             color: surface2,
             child: Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 10, bottom: 10),
-              child: Text(
-                widget.workout.title,
-                style: const TextStyle(
-                  fontSize: 15.0,
-                  color: onSurface
-              ),
-          )
-        )
-      )
-    );
+                padding: const EdgeInsets.only(
+                    left: 8.0, right: 8.0, top: 10, bottom: 10),
+                child: Text(
+                  widget.workout.title,
+                  style: const TextStyle(fontSize: 15.0, color: onSurface),
+                ))));
   }
 }
 
@@ -179,32 +169,41 @@ showMyDialog(BuildContext context, Workout workout, Function callback) {
     titleTextStyle: const TextStyle(color: onSurface, fontSize: 20),
     children: <Widget>[
       SimpleDialogOption(
-        onPressed: () { Navigator.pop(context, true); },
-        child: const Text('Start', style: TextStyle(color: primary),),
+        onPressed: () {
+          Navigator.pop(context, true);
+        },
+        child: const Text(
+          'Start',
+          style: TextStyle(color: primary),
+        ),
       ),
       SimpleDialogOption(
-        onPressed: () { Navigator.pop(context, false); },
-        child: const Text('Cancel', style: TextStyle(color: primary),),
+        onPressed: () {
+          Navigator.pop(context, false);
+        },
+        child: const Text(
+          'Cancel',
+          style: TextStyle(color: primary),
+        ),
       ),
     ],
   );
 
   Future dialogValue = showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return dialog;
-    }
-  );
+      context: context,
+      builder: (BuildContext context) {
+        return dialog;
+      });
 
   void saveWorkout(Workout workout) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Map<String, dynamic> workoutJSON = workout.toJson(); 
+    Map<String, dynamic> workoutJSON = workout.toJson();
     String workoutJSONString = jsonEncode(workoutJSON);
     await prefs.setString('active_workout', workoutJSONString);
   }
 
   dialogValue.then((value) {
-    if (value == true){
+    if (value == true) {
       saveWorkout(workout);
       callback();
     }

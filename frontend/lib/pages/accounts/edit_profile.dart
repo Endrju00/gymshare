@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gymshare/components/utils/requests.dart';
+import 'package:gymshare/components/widgets/seamless_pattern.dart';
 import 'package:gymshare/settings/settings.dart';
 import 'package:http/http.dart' as http;
 import 'package:gymshare/components/utils/helpers.dart';
@@ -90,87 +91,102 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: secondaryColor, title: const Text('Edit profile')),
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: ScrollConfig(
-            child: ListView(
-              controller: _scrollController,
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-              children: [
-                CustomTextFormField(
-                  controller: _firstNameController,
-                  labelText: 'First name',
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please provide your first name.';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {},
-                ),
-                CustomTextFormField(
-                  controller: _lastNameController,
-                  labelText: 'Last name',
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please provide your last name.';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {},
-                  onTap: () => scrollToBottom(_scrollController),
-                ),
-                CustomTextFormField(
-                  controller: _heightController,
-                  labelText: 'Height',
-                  validator: (value) => null,
-                  onSaved: (value) {},
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  onTap: () => scrollToBottom(_scrollController),
-                ),
-                CustomTextFormField(
-                  controller: _weightController,
-                  labelText: 'Weight',
-                  validator: (value) => null,
-                  onSaved: (value) {},
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'(^\d*\.?\d*)')),
-                  ],
-                  onTap: () => scrollToBottom(_scrollController),
-                ),
-                const SizedBox(height: 20),
-                const Divider(color: primaryTextColor),
-                RoundedRectangleButton(
-                  isButtonDisabled: _buttonDisabled,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  onPress: () async {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    final isValid = _formKey.currentState!.validate();
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: mobileWidth),
+      child: Scaffold(
+        appBar: AppBar(
+            backgroundColor: secondaryColor, title: const Text('Edit profile')),
+        body: SeamlessPattern(
+          child: SafeArea(
+            child: Form(
+              key: _formKey,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: mobileWidth),
+                  child: ScrollConfig(
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 10),
+                      child: Column(
+                        children: [
+                          CustomTextFormField(
+                            controller: _firstNameController,
+                            labelText: 'First name',
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please provide your first name.';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {},
+                          ),
+                          CustomTextFormField(
+                            controller: _lastNameController,
+                            labelText: 'Last name',
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please provide your last name.';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {},
+                            onTap: () => scrollToBottom(_scrollController),
+                          ),
+                          CustomTextFormField(
+                            controller: _heightController,
+                            labelText: 'Height',
+                            validator: (value) => null,
+                            onSaved: (value) {},
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            onTap: () => scrollToBottom(_scrollController),
+                          ),
+                          CustomTextFormField(
+                            controller: _weightController,
+                            labelText: 'Weight',
+                            validator: (value) => null,
+                            onSaved: (value) {},
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'(^\d*\.?\d*)')),
+                            ],
+                            onTap: () => scrollToBottom(_scrollController),
+                          ),
+                          const SizedBox(height: 20),
+                          const Divider(color: primaryTextColor),
+                          RoundedRectangleButton(
+                            isButtonDisabled: _buttonDisabled,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 20),
+                            onPress: () async {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              final isValid = _formKey.currentState!.validate();
 
-                    if (isValid) {
-                      setState(() => _buttonDisabled = true);
-                      if (await _editProfile()) {
-                        Navigator.of(context).pop();
-                      } else {
-                        setState(() => _buttonDisabled = false);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          getErrorSnackBar(text: 'Failed to edit profile.'),
-                        );
-                      }
-                    }
-                  },
-                  child: const Text('Save changes'),
+                              if (isValid) {
+                                setState(() => _buttonDisabled = true);
+                                if (await _editProfile()) {
+                                  Navigator.of(context).pop();
+                                } else {
+                                  setState(() => _buttonDisabled = false);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    getErrorSnackBar(
+                                        text: 'Failed to edit profile.'),
+                                  );
+                                }
+                              }
+                            },
+                            child: const Text('Save changes'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ],
+              ),
             ),
           ),
         ),
