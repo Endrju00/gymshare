@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:gymshare/api/models/api_response.dart';
 import 'package:gymshare/api/models/exercise_in_workout.dart';
 import 'package:gymshare/api/models/rating.dart';
@@ -402,11 +405,23 @@ Future<bool> createWorkout(Map<String, dynamic> data, BuildContext context,
   request.fields['description'] = data['description'];
   request.fields['visibility'] = data['visibility'];
   request.fields['cycles'] = data['cycles'].toString();
-  request.files
-      .add(await http.MultipartFile.fromPath('thumbnail', data['image_path']));
+
+  if (kIsWeb) {
+    final file = data['image_path'] as PlatformFile;
+    request.files.add(
+      http.MultipartFile(
+        'image',
+        Stream.fromIterable([file.bytes as List<int>]),
+        file.size,
+        filename: file.name,
+      ),
+    );
+  } else {
+    final path = data['image_path'] as String;
+    request.files.add(await http.MultipartFile.fromPath('thumbnail', path));
+  }
 
   final response = await request.send();
-
   if (response.statusCode == 201) {
     return true;
   } else if (response.statusCode == 401) {
@@ -457,23 +472,22 @@ Future<bool> editWorkout(Map<String, dynamic> data, BuildContext context,
   }
 }
 
-Future<bool> sendStatistics(String data, BuildContext context, [bool mounted = true]) async {
+Future<bool> sendStatistics(String data, BuildContext context,
+    [bool mounted = true]) async {
   final token = await getJWT();
-  final response = await http.post(
-    Uri.parse(buildUrl('stats/synchronize/')),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer ${token.accessToken}',
-    },
-    body: data
-  );
+  final response = await http.post(Uri.parse(buildUrl('stats/synchronize/')),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${token.accessToken}',
+      },
+      body: data);
 
   if (response.statusCode == 200) {
     return true;
   } else if (response.statusCode == 401) {
     if (await refreshToken(refresh: token.refreshToken)) {
       if (mounted) return sendStatistics(data, context, mounted);
-        throw Exception('Widget not mounted.');
+      throw Exception('Widget not mounted.');
     } else {
       if (mounted) logOut(context);
       throw Exception('Authorization failed.');
@@ -483,23 +497,22 @@ Future<bool> sendStatistics(String data, BuildContext context, [bool mounted = t
   }
 }
 
-Future<bool> sendRating(String data, BuildContext context, [bool mounted = true]) async {
+Future<bool> sendRating(String data, BuildContext context,
+    [bool mounted = true]) async {
   final token = await getJWT();
-  final response = await http.post(
-    Uri.parse(buildUrl('workouts/ratings/')),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer ${token.accessToken}',
-    },
-    body: data
-  );
+  final response = await http.post(Uri.parse(buildUrl('workouts/ratings/')),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${token.accessToken}',
+      },
+      body: data);
 
   if (response.statusCode == 200) {
     return true;
   } else if (response.statusCode == 401) {
     if (await refreshToken(refresh: token.refreshToken)) {
       if (mounted) return sendStatistics(data, context, mounted);
-        throw Exception('Widget not mounted.');
+      throw Exception('Widget not mounted.');
     } else {
       if (mounted) logOut(context);
       throw Exception('Authorization failed.');
@@ -507,13 +520,12 @@ Future<bool> sendRating(String data, BuildContext context, [bool mounted = true]
   } else if (response.statusCode == 400) {
     Rating ratingData = Rating.fromJson(jsonDecode(data));
     final responseEdit = await http.put(
-      Uri.parse(buildUrl('workouts/ratings/${ratingData.workout}/')),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${token.accessToken}',
-      },
-      body: data
-    );
+        Uri.parse(buildUrl('workouts/ratings/${ratingData.workout}/')),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${token.accessToken}',
+        },
+        body: data);
 
     if (responseEdit.statusCode == 200) {
       return true;

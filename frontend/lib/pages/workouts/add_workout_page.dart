@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,6 +37,18 @@ class _AddWorkoutPageState extends State<AddWorkoutPage> {
   int _cycles = 1;
   bool _isButtonDisabled = false;
   bool _editMode = false;
+  PlatformFile? _webImage;
+
+  bool get isImageUploaded {
+    if (kIsWeb) {
+      return (!_editMode && _webImage == null) ||
+          (_editMode &&
+              widget.workout!.thumbnailUrl == null &&
+              _webImage == null);
+    }
+    return (!_editMode && _image == null) ||
+        (_editMode && widget.workout!.thumbnailUrl == null && _image == null);
+  }
 
   @override
   void initState() {
@@ -78,6 +91,20 @@ class _AddWorkoutPageState extends State<AddWorkoutPage> {
   }
 
   Future _pickImage(ImageSource source) async {
+    if (kIsWeb) {
+      final img = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'png'],
+      );
+
+      if (img != null) {
+        setState(() => _webImage = img.files.single);
+        if (!mounted) return;
+        Navigator.of(context).pop();
+        return;
+      }
+    }
+
     try {
       final img = await ImagePicker().pickImage(source: source);
       if (img == null) return;
@@ -86,6 +113,7 @@ class _AddWorkoutPageState extends State<AddWorkoutPage> {
       if (!mounted) return;
       Navigator.of(context).pop();
     } on PlatformException {
+      if (!mounted) return;
       Navigator.of(context).pop();
     }
   }
@@ -106,25 +134,26 @@ class _AddWorkoutPageState extends State<AddWorkoutPage> {
         height: 150,
         child: Row(
           children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    iconSize: 40,
-                    splashRadius: 70,
-                    onPressed: () => _pickImage(ImageSource.camera),
-                    icon: const Icon(Icons.camera_alt),
-                  ),
-                  const Text(
-                    'Take a photo',
-                    style: TextStyle(
-                      color: primaryTextColor,
+            if (!kIsWeb)
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      iconSize: 40,
+                      splashRadius: 70,
+                      onPressed: () => _pickImage(ImageSource.camera),
+                      icon: const Icon(Icons.camera_alt),
                     ),
-                  )
-                ],
+                    const Text(
+                      'Take a photo',
+                      style: TextStyle(
+                        color: primaryTextColor,
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -156,7 +185,7 @@ class _AddWorkoutPageState extends State<AddWorkoutPage> {
       'description': _descriptionController.text,
       'visibility': _isPublic ? 'Public' : 'Hidden',
       'cycles': _cycles,
-      'image_path': _image!.path,
+      'image_path': kIsWeb ? _webImage : _image!.path,
     };
 
     return await createWorkout(data, context, mounted);
@@ -201,10 +230,7 @@ class _AddWorkoutPageState extends State<AddWorkoutPage> {
                               labelText: 'Description',
                               validator: _validateInput,
                             ),
-                            ((!_editMode && _image == null) ||
-                                    (_editMode &&
-                                        widget.workout!.thumbnailUrl == null &&
-                                        _image == null))
+                            isImageUploaded
                                 ? RoundedRectangleButton(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16.0),
@@ -350,6 +376,8 @@ class _AddWorkoutPageState extends State<AddWorkoutPage> {
     late ImageProvider<Object> img;
     if (_image != null) {
       img = FileImage(_image!);
+    } else if (_webImage != null) {
+      img = MemoryImage(_webImage!.bytes!);
     } else if (_editMode) {
       img = NetworkImage(widget.workout!.thumbnailUrl!);
     }
