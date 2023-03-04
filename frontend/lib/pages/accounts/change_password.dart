@@ -106,9 +106,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
                             if (isValid) {
                               setState(() => _buttonDisabled = true);
-                              if (await _changePassword(
+                              final changed = await _changePassword(
                                   oldPassword: _oldPasswordController.text,
-                                  newPassword: _newPasswordController.text)) {
+                                  newPassword: _newPasswordController.text);
+                              if (!mounted) return;
+                              if (changed) {
                                 Navigator.of(context).pop();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   getInfoSnackBar(

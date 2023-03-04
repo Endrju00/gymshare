@@ -168,7 +168,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
                               if (isValid) {
                                 setState(() => _buttonDisabled = true);
-                                if (await _editProfile()) {
+                                final edited = await _editProfile();
+                                if (!mounted) return;
+                                if (edited) {
                                   Navigator.of(context).pop();
                                 } else {
                                   setState(() => _buttonDisabled = false);

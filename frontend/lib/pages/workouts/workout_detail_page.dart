@@ -72,12 +72,14 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
   void _saveWorkout() async {
     exercisesSaved.clear();
     exercisesSaved.addAll(exercisesToSave);
-    if (await editWorkoutExercises(
+    final edited = await editWorkoutExercises(
       context,
       mounted: mounted,
       workoutId: widget.workout.id,
       exercises: exercisesSaved,
-    )) {
+    );
+    if (!mounted) return;
+    if (edited) {
       ScaffoldMessenger.of(context).showSnackBar(
         getInfoSnackBar(
           text: 'Workout exercises has been edited.',
@@ -148,19 +150,21 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
                             : Icons.favorite_outline),
                         onPressed: () async {
                           if (!isFavorite) {
-                            if (await addToFavorites(
+                            final added = await addToFavorites(
                               context,
                               mounted: mounted,
                               workoutId: widget.workout.id,
-                            )) {
+                            );
+                            if (added) {
                               setState(() => isFavorite = true);
                             }
                           } else {
-                            if (await deleteFromFavorites(
+                            final deleted = await deleteFromFavorites(
                               context,
                               mounted: mounted,
                               workoutId: widget.workout.id,
-                            )) {
+                            );
+                            if (deleted) {
                               setState(() => isFavorite = false);
                             }
                           }

@@ -69,11 +69,11 @@ class WorkoutSearchDelegate extends SearchDelegate {
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
       textTheme: TextTheme(
-        button: GoogleFonts.roboto(
+        labelLarge: GoogleFonts.roboto(
           color: primaryTextColor,
           fontWeight: FontWeight.w500,
         ),
-        headline6: GoogleFonts.roboto(
+        titleLarge: GoogleFonts.roboto(
           color: primaryTextColor,
           fontSize: 20.0,
           fontWeight: FontWeight.w500,

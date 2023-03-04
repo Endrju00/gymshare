@@ -258,19 +258,21 @@ class _WorkoutTileState extends State<WorkoutTile> {
                           IconButton(
                             onPressed: () async {
                               if (!isFavorite) {
-                                if (await addToFavorites(
+                                final added = await addToFavorites(
                                   context,
                                   mounted: mounted,
                                   workoutId: widget.workout.id,
-                                )) {
+                                );
+                                if (added) {
                                   setState(() => isFavorite = true);
                                 }
                               } else {
-                                if (await deleteFromFavorites(
+                                final deleted = await deleteFromFavorites(
                                   context,
                                   mounted: mounted,
                                   workoutId: widget.workout.id,
-                                )) {
+                                );
+                                if (deleted) {
                                   setState(() => isFavorite = false);
                                 }
                               }

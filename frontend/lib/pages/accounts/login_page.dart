@@ -48,7 +48,9 @@ class _LoginPageState extends State<LoginPage> {
     if (isValid) {
       setState(() => _buttonDisabled = true);
       _formKey.currentState!.save();
-      if (await gatherToken(username, password)) {
+      final gathered = await gatherToken(username, password);
+      if (!mounted) return;
+      if (gathered) {
         ScaffoldMessenger.of(context).showSnackBar(
           getInfoSnackBar(text: 'Successfuly logged in.'),
         );

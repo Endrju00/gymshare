@@ -78,7 +78,9 @@ class _SignupPageState extends State<SignupPage> {
     if (isValid) {
       setState(() => _buttonDisabled = true);
       _formKey.currentState!.save();
-      if (await createUser()) {
+      final created = await createUser();
+      if (!mounted) return;
+      if (created) {
         ScaffoldMessenger.of(context).showSnackBar(
           getInfoSnackBar(text: 'Account created successfully!'),
         );

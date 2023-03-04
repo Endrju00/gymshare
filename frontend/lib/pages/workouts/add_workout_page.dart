@@ -229,7 +229,10 @@ class _AddWorkoutPageState extends State<AddWorkoutPage> {
                                       _formKey.currentState!.validate();
                                   if (isValid) {
                                     setState(() => _isButtonDisabled = true);
-                                    if (await _createWorkout()) {
+                                    final workoutCreated =
+                                        await _createWorkout();
+                                    if (!mounted) return;
+                                    if (workoutCreated) {
                                       Navigator.of(context).pop();
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
@@ -258,8 +261,10 @@ class _AddWorkoutPageState extends State<AddWorkoutPage> {
                                       _formKey.currentState!.validate();
                                   if (isValid) {
                                     setState(() => _isButtonDisabled = true);
-                                    if (await editWorkout(
-                                        data, context, mounted)) {
+                                    final workoutEdited = await editWorkout(
+                                        data, context, mounted);
+                                    if (!mounted) return;
+                                    if (workoutEdited) {
                                       Navigator.of(context).pop(data);
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
