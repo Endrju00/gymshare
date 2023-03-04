@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'GymShare',
+      title: 'Gymshare',
       theme: ThemeData(
         brightness: Brightness.dark,
         textTheme: GoogleFonts.robotoTextTheme(

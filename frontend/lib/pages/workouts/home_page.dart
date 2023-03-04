@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gymshare/api/models/api_response.dart';
@@ -12,6 +13,7 @@ import 'package:gymshare/pages/workouts/add_workout_page.dart';
 import 'package:gymshare/pages/workouts/exercises_page.dart';
 import 'package:gymshare/pages/workouts/workouts_page.dart';
 import 'package:gymshare/settings/colors.dart';
+import 'package:gymshare/settings/settings.dart';
 
 class WorkoutSearchDelegate extends SearchDelegate {
   final BuildContext context;
@@ -22,15 +24,17 @@ class WorkoutSearchDelegate extends SearchDelegate {
   List<String> get searchResults {
     return searchTypeWorkouts
         ? [
-            'Turbo Admin Workout',
+            'Admin Workout',
             'FBW',
             'Split',
-            'Push Pull Legs',
+            'Pull',
+            'Chest',
           ]
         : [
             'Push Ups',
             'Deadlift',
             'Running',
+            'Squats',
           ];
   }
 
@@ -144,43 +148,48 @@ class WorkoutSearchDelegate extends SearchDelegate {
         }
 
         return SeamlessPattern(
-          child: ScrollConfig(
-            child: ListView.builder(
-              controller: _controller,
-              padding: const EdgeInsets.only(
-                  top: 20, bottom: 10, left: 20, right: 20),
-              itemCount: searchTypeWorkouts
-                  ? workouts.length + 1
-                  : exercises.length + 1,
-              itemBuilder: (context, index) {
-                if (searchTypeWorkouts) {
-                  if (index < workouts.length) {
-                    return WorkoutTile(workout: workouts[index]);
-                  } else {
-                    return index == apiResponse.count
-                        ? Container()
-                        : const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: Center(
-                                child: CircularProgressIndicator(
-                                    color: tertiaryColor)),
-                          );
-                  }
-                } else {
-                  if (index < exercises.length) {
-                    return ExerciseTile(exercise: exercises[index]);
-                  } else {
-                    return index == apiResponse.count
-                        ? Container()
-                        : const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: Center(
-                                child: CircularProgressIndicator(
-                                    color: tertiaryColor)),
-                          );
-                  }
-                }
-              },
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: mobileWidth),
+              child: ScrollConfig(
+                child: ListView.builder(
+                  controller: _controller,
+                  padding: const EdgeInsets.only(
+                      top: 20, bottom: 10, left: 20, right: 20),
+                  itemCount: searchTypeWorkouts
+                      ? workouts.length + 1
+                      : exercises.length + 1,
+                  itemBuilder: (context, index) {
+                    if (searchTypeWorkouts) {
+                      if (index < workouts.length) {
+                        return WorkoutTile(workout: workouts[index]);
+                      } else {
+                        return index == apiResponse.count
+                            ? Container()
+                            : const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16),
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                                        color: tertiaryColor)),
+                              );
+                      }
+                    } else {
+                      if (index < exercises.length) {
+                        return ExerciseTile(exercise: exercises[index]);
+                      } else {
+                        return index == apiResponse.count
+                            ? Container()
+                            : const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16),
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                                        color: tertiaryColor)),
+                              );
+                      }
+                    }
+                  },
+                ),
+              ),
             ),
           ),
         );
@@ -202,17 +211,26 @@ class WorkoutSearchDelegate extends SearchDelegate {
     apiResponse = ApiResponse(count: 0, results: []);
 
     return SeamlessPattern(
-      child: ListView.builder(
-        itemCount: suggestions.length,
-        itemBuilder: (context, index) => ListTile(
-            title: Text(
-              suggestions[index],
-              style: const TextStyle(color: primaryTextColor),
+      child: Center(
+        child: Container(
+          decoration: BoxDecoration(
+              border: kIsWeb ? Border.all(color: secondaryColor) : null),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: mobileWidth),
+            child: ListView.builder(
+              itemCount: suggestions.length,
+              itemBuilder: (context, index) => ListTile(
+                  title: Text(
+                    suggestions[index],
+                    style: const TextStyle(color: primaryTextColor),
+                  ),
+                  onTap: () {
+                    query = suggestions[index];
+                    showResults(context);
+                  }),
             ),
-            onTap: () {
-              query = suggestions[index];
-              showResults(context);
-            }),
+          ),
+        ),
       ),
     );
   }
