@@ -25,6 +25,7 @@ dependencies:
   image_cropper: ^3.0.1
   flutter_time_picker_spinner: ^2.0.0
   file_picker: ^5.0.0
+  url_strategy: ^0.2.0
 
 dev_dependencies:
   flutter_test:
