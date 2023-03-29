@@ -91,6 +91,9 @@ Future<Profile> fetchUserData(BuildContext context,
 Future<ApiResponse> getWorkouts(BuildContext context,
     [bool mounted = true, String? next]) async {
   final token = await getJWT();
+  if (next != null) {
+    next = '${next.substring(0, 4)}s${next.substring(4)}';
+  }
   final response = await http.get(
     Uri.parse(next ?? buildUrl('workouts/plans/')),
     headers: <String, String>{
@@ -117,6 +120,9 @@ Future<ApiResponse> getWorkouts(BuildContext context,
 Future<ApiResponse> searchWorkouts(BuildContext context, String query,
     [bool mounted = true, String? next]) async {
   final token = await getJWT();
+  if (next != null) {
+    next = '${next.substring(0, 4)}s${next.substring(4)}';
+  }
   final response = await http.get(
     Uri.parse(next ?? buildUrl('workouts/plans/?search=$query')),
     headers: <String, String>{
@@ -143,6 +149,9 @@ Future<ApiResponse> searchWorkouts(BuildContext context, String query,
 Future<ApiResponse> searchCreated(BuildContext context, String query,
     [bool mounted = true, String? next]) async {
   final token = await getJWT();
+  if (next != null) {
+    next = '${next.substring(0, 4)}s${next.substring(4)}';
+  }
   final response = await http.get(
     Uri.parse(next ??
         buildUrl(
@@ -171,6 +180,9 @@ Future<ApiResponse> searchCreated(BuildContext context, String query,
 Future<ApiResponse> getExercises(BuildContext context,
     [bool mounted = true, String? next]) async {
   final token = await getJWT();
+  if (next != null) {
+    next = '${next.substring(0, 4)}s${next.substring(4)}';
+  }
   final response = await http.get(
     Uri.parse(next ?? buildUrl('workouts/exercises/')),
     headers: <String, String>{
@@ -197,6 +209,9 @@ Future<ApiResponse> getExercises(BuildContext context,
 Future<ApiResponse> searchExercises(BuildContext context, String query,
     [bool mounted = true, String? next]) async {
   final token = await getJWT();
+  if (next != null) {
+    next = '${next.substring(0, 4)}s${next.substring(4)}';
+  }
   final response = await http.get(
     Uri.parse(next ?? buildUrl('workouts/exercises/?search=$query')),
     headers: <String, String>{
@@ -222,6 +237,9 @@ Future<ApiResponse> searchExercises(BuildContext context, String query,
 Future<ApiResponse> getFavoriteWorkouts(BuildContext context,
     [bool mounted = true, String? next]) async {
   final token = await getJWT();
+  if (next != null) {
+    next = '${next.substring(0, 4)}s${next.substring(4)}';
+  }
   final response = await http.get(
     Uri.parse(next ?? buildUrl('workouts/favorites/')),
     headers: <String, String>{
@@ -248,6 +266,9 @@ Future<ApiResponse> getFavoriteWorkouts(BuildContext context,
 Future<ApiResponse> getCreatedWorkouts(BuildContext context,
     [bool mounted = true, String? next]) async {
   final token = await getJWT();
+  if (next != null) {
+    next = '${next.substring(0, 4)}s${next.substring(4)}';
+  }
   final response = await http.get(
     Uri.parse(next ??
         buildUrl(
