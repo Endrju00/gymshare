@@ -54,12 +54,13 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
     return ScrollConfig(
       child: ListView.builder(
         controller: _controller,
+        key: const Key('workouts_list'),
         padding:
             const EdgeInsets.only(top: 20, bottom: 10, left: 20, right: 20),
         itemCount: workouts.length + 1,
         itemBuilder: (context, index) {
           if (index < workouts.length) {
-            return WorkoutTile(workout: workouts[index]);
+            return WorkoutTile(workout: workouts[index], key: Key('workout_tile_$index'),);
           } else {
             return index == _apiResponse.count
                 ? Container()

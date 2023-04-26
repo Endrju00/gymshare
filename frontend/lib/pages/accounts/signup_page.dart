@@ -122,6 +122,7 @@ class _SignupPageState extends State<SignupPage> {
                           SizedBox(height: size.height * 0.05),
                           CustomTextFormField(
                             controller: _emailController,
+                            key: const Key('email-field'),
                             labelText: 'Email',
                             keyboardType: TextInputType.emailAddress,
                             validator: validateEmail,
@@ -130,6 +131,7 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                           CustomTextFormField(
                             controller: _usernameController,
+                            key: const Key('username-field'),
                             labelText: 'Username',
                             validator: validateUsername,
                             onSaved: (value) =>
@@ -139,6 +141,7 @@ class _SignupPageState extends State<SignupPage> {
                           CustomTextFormField(
                             controller: _passwordController,
                             obsecureText: true,
+                            key: const Key('password-field'),
                             labelText: 'Password',
                             keyboardType: TextInputType.visiblePassword,
                             validator: validatePassword,
