@@ -92,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                           const Hero(tag: 'logo', child: GymShareLogo()),
                           SizedBox(height: size.height * 0.05),
                           CustomTextFormField(
+                            key: const Key('login-field'),
                             controller: _usernameController,
                             labelText: 'Username',
                             validator: _validateInput,
@@ -100,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                             onTap: () => scrollToBottom(_scrollController),
                           ),
                           CustomTextFormField(
+                            key: const Key('password-field'),
                             controller: _passwordController,
                             obsecureText: true,
                             labelText: 'Password',

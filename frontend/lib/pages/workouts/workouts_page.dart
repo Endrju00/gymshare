@@ -26,6 +26,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
     if (next && _apiResponse.next != null || !next) {
       _apiResponse =
           await getWorkouts(context, mounted, next ? _apiResponse.next : null);
+      if (!mounted) return;
       setState(() => workouts.addAll(List<Workout>.from(
           _apiResponse.results.map((w) => Workout.fromJson(w)))));
     }

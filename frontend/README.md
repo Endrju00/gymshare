@@ -1,16 +1,15 @@
-# mobile
+# Gymshare
 
-A new Flutter project.
+## Tests
 
-## Getting Started
+To get started testing in a web browser, Download [ChromeDriver](https://chromedriver.chromium.org/downloads).
 
-This project is a starting point for a Flutter application.
+Launch chromedriver as follows:
+```sh
+chromedriver --port=4444
+```
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+From the root of the project, run the following command:
+```sh
+flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart -d chrome
+```
