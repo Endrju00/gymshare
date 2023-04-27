@@ -61,9 +61,10 @@ class _ExerciseHistoryPageState extends State<ExerciseHistoryPage> {
             if (stats.isNotEmpty)
               Expanded(
                 child: ListView.builder(
+                  key: const Key('exercises_list'),
                   itemCount: stats.length,
                   itemBuilder: (context, index) =>
-                      ExerciseHistoryTile(item: stats[index]),
+                      ExerciseHistoryTile(item: stats[index], key: Key('exercises_tile_$index'),),
                 ),
               ),
             if (stats.isEmpty)

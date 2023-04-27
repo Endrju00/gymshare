@@ -67,9 +67,10 @@ class _BurnedCaloriesPageState extends State<BurnedCaloriesPage> {
                   day: false,
                   controller: _controller,
                   onDatePicked: onDatePicked,
+                  key: const Key('date_picker')
                 ),
               ),
-              if (stats.isNotEmpty) BarChartSample(stats: stats),
+              if (stats.isNotEmpty) BarChartSample(stats: stats, key: const Key('burned_calories_chart')),
               if (stats.isEmpty)
                 Column(
                   children: const [
