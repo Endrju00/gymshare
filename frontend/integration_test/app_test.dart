@@ -51,7 +51,7 @@ void main() {
       },
     );
     */
-    ///*
+    /*
     testWidgets(
       'display burned calories',
       (tester) async {
@@ -73,11 +73,11 @@ void main() {
         await tester.tap(find.byType(IconButton));
         await tester.tap(find.widgetWithText(TextButton, 'OK'));
         await tester.pumpAndSettle();*/
-        await tester.tap(find.byKey(const Key('burned_calories_chart')));
+        await tester.ensureVisible(find.byKey(const Key('burned_calories_chart')));
       },
     );
-    //*/
-    /*
+    */
+    ///*
     testWidgets(
       'display exercises',
           (tester) async {
@@ -98,6 +98,6 @@ void main() {
         await tester.ensureVisible(find.byKey(const Key('exercises_list'))); //find.byKey(const Key('exercises_tile_2'))
           },
     );
-    */
+    //*/
   });
 }
