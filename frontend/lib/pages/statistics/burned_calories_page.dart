@@ -23,8 +23,9 @@ class _BurnedCaloriesPageState extends State<BurnedCaloriesPage> {
   List<StatisticCalories> stats = [];
 
   void fetchBurnedCaloriesStats() async {
-    setState(() => stats.clear());
+    stats.clear();
     final data = await getBurnedCaloriesStats(selectedDate, context, mounted);
+    if (!mounted) return;
     setState(() => stats.addAll(data));
   }
 
@@ -64,13 +65,14 @@ class _BurnedCaloriesPageState extends State<BurnedCaloriesPage> {
               Form(
                 key: _formKey,
                 child: CustomDatePickerFormField(
-                  day: false,
-                  controller: _controller,
-                  onDatePicked: onDatePicked,
-                  key: const Key('date_picker')
-                ),
+                    day: false,
+                    controller: _controller,
+                    onDatePicked: onDatePicked,
+                    key: const Key('date_picker')),
               ),
-              if (stats.isNotEmpty) BarChartSample(stats: stats, key: const Key('burned_calories_chart')),
+              if (stats.isNotEmpty)
+                BarChartSample(
+                    stats: stats, key: const Key('burned_calories_chart')),
               if (stats.isEmpty)
                 Column(
                   children: const [

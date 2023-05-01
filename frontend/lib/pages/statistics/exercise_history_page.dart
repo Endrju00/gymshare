@@ -23,6 +23,7 @@ class _ExerciseHistoryPageState extends State<ExerciseHistoryPage> {
   void fetchExerciseHistory() async {
     stats.clear();
     final history = await getExerciseHistory(selectedDate, context, mounted);
+    if (!mounted) return;
     setState(() => stats.addAll(history));
   }
 
