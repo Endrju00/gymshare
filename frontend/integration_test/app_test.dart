@@ -66,12 +66,12 @@ void main() {
     //         find.byKey(const Key('password-field')), 'Strong2137');
     //     await tester.pumpAndSettle();
     //     await tester.tap(find.text('Login'));
-    //     await tester.pumpAndSettle();
+    //     await tester.pumpAndSettle(const Duration(seconds: 3));
     //     await tester.dragUntilVisible(find.byKey(const Key('workout_tile_15')),
-    //         find.byKey(const Key('workouts_list')), Offset(0, -200));
+    //         find.byKey(const Key('workouts_list')), const Offset(0, -200));
     //     await tester.pumpAndSettle();
     //     await tester.dragUntilVisible(find.byKey(const Key('workout_tile_30')),
-    //         find.byKey(const Key('workouts_list')), Offset(0, -200));
+    //         find.byKey(const Key('workouts_list')), const Offset(0, -200));
     //   },
     // );
 
@@ -88,7 +88,8 @@ void main() {
     //     await tester.tap(find.text('Login'));
     //     await tester.pumpAndSettle();
     //     await tester.tap(find.text('Statistics'));
-    //     await tester.pumpAndSettle(const Duration(milliseconds: 1200));
+    //     await tester.pumpAndSettle();
+    //     await tester.pumpAndSettle(const Duration(seconds: 7));
     //     await tester
     //         .ensureVisible(find.byKey(const Key('burned_calories_chart')));
     //     await tester.pumpAndSettle();
@@ -110,7 +111,8 @@ void main() {
         await tester.tap(find.text('Statistics'));
         await tester.pumpAndSettle();
         await tester.tap(find.text('Exercises'));
-        await tester.pumpAndSettle(const Duration(milliseconds: 200));
+        await tester.pumpAndSettle();
+        await tester.pumpAndSettle(const Duration(seconds: 8));
         await tester.ensureVisible(find.byKey(const Key('exercises_list')));
         await tester.pumpAndSettle();
       },
