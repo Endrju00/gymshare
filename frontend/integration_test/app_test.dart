@@ -14,8 +14,10 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   group('end-to-end test', () {
     // testWidgets(
+      
     //   'create account test',
     //   (tester) async {
+    //     final stopwatch = Stopwatch()..start();
     //     await startApp(tester);
     //     await tester.pumpAndSettle();
     //     await tester.tap(find.text('Don’t have account yet? Create a new one'));
@@ -52,12 +54,14 @@ void main() {
     //     await tester.pumpAndSettle();
     //     await tester.tap(find.text('Login'));
     //     await tester.pumpAndSettle();
+    //     print('test executed in ${stopwatch.elapsed}');
     //   },
     // );
 
     // testWidgets(
     //   'display trainings test',
     //   (tester) async {
+    //     final stopwatch = Stopwatch()..start();
     //     await startApp(tester);
     //     await tester.pumpAndSettle();
     //     await tester.enterText(find.byKey(const Key('login-field')), 'admin');
@@ -72,33 +76,14 @@ void main() {
     //     await tester.pumpAndSettle();
     //     await tester.dragUntilVisible(find.byKey(const Key('workout_tile_30')),
     //         find.byKey(const Key('workouts_list')), const Offset(0, -200));
-    //   },
-    // );
-
-    // testWidgets(
-    //   'display burned calories',
-    //   (tester) async {
-    //     await startApp(tester);
-    //     await tester.pumpAndSettle();
-    //     await tester.enterText(find.byKey(const Key('login-field')), 'admin');
-    //     await tester.pumpAndSettle();
-    //     await tester.enterText(
-    //         find.byKey(const Key('password-field')), 'Strong2137');
-    //     await tester.pumpAndSettle();
-    //     await tester.tap(find.text('Login'));
-    //     await tester.pumpAndSettle();
-    //     await tester.tap(find.text('Statistics'));
-    //     await tester.pumpAndSettle();
-    //     await tester.pumpAndSettle(const Duration(seconds: 7));
-    //     await tester
-    //         .ensureVisible(find.byKey(const Key('burned_calories_chart')));
-    //     await tester.pumpAndSettle();
+    //     print('test executed in ${stopwatch.elapsed}');
     //   },
     // );
 
     testWidgets(
-      'display exercises',
+      'display burned calories',
       (tester) async {
+        final stopwatch = Stopwatch()..start();
         await startApp(tester);
         await tester.pumpAndSettle();
         await tester.enterText(find.byKey(const Key('login-field')), 'admin');
@@ -110,12 +95,36 @@ void main() {
         await tester.pumpAndSettle();
         await tester.tap(find.text('Statistics'));
         await tester.pumpAndSettle();
-        await tester.tap(find.text('Exercises'));
+        await tester.pumpAndSettle(const Duration(seconds: 7));
+        await tester
+            .ensureVisible(find.byKey(const Key('burned_calories_chart')));
         await tester.pumpAndSettle();
-        await tester.pumpAndSettle(const Duration(seconds: 8));
-        await tester.ensureVisible(find.byKey(const Key('exercises_list')));
-        await tester.pumpAndSettle();
-      },
+        print('test executed in ${stopwatch.elapsed}');
+      },  
     );
+
+    // testWidgets(
+    //   'display exercises',
+    //   (tester) async {
+    //     final stopwatch = Stopwatch()..start();
+    //     await startApp(tester);
+    //     await tester.pumpAndSettle();
+    //     await tester.enterText(find.byKey(const Key('login-field')), 'admin');
+    //     await tester.pumpAndSettle();
+    //     await tester.enterText(
+    //         find.byKey(const Key('password-field')), 'Strong2137');
+    //     await tester.pumpAndSettle();
+    //     await tester.tap(find.text('Login'));
+    //     await tester.pumpAndSettle();
+    //     await tester.tap(find.text('Statistics'));
+    //     await tester.pumpAndSettle();
+    //     await tester.tap(find.text('Exercises'));
+    //     await tester.pumpAndSettle();
+    //     await tester.pumpAndSettle(const Duration(seconds: 8));
+    //     await tester.ensureVisible(find.byKey(const Key('exercises_list')));
+    //     await tester.pumpAndSettle();
+    //     print('test executed in ${stopwatch.elapsed}');
+    //   },
+    // );
   });
 }
