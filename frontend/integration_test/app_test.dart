@@ -80,31 +80,8 @@ void main() {
     //   },
     // );
 
-    testWidgets(
-      'display burned calories',
-      (tester) async {
-        final stopwatch = Stopwatch()..start();
-        await startApp(tester);
-        await tester.pumpAndSettle();
-        await tester.enterText(find.byKey(const Key('login-field')), 'admin');
-        await tester.pumpAndSettle();
-        await tester.enterText(
-            find.byKey(const Key('password-field')), 'Strong2137');
-        await tester.pumpAndSettle();
-        await tester.tap(find.text('Login'));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text('Statistics'));
-        await tester.pumpAndSettle();
-        await tester.pumpAndSettle(const Duration(seconds: 7));
-        await tester
-            .ensureVisible(find.byKey(const Key('burned_calories_chart')));
-        await tester.pumpAndSettle();
-        print('test executed in ${stopwatch.elapsed}');
-      },  
-    );
-
     // testWidgets(
-    //   'display exercises',
+    //   'display burned calories',
     //   (tester) async {
     //     final stopwatch = Stopwatch()..start();
     //     await startApp(tester);
@@ -118,13 +95,36 @@ void main() {
     //     await tester.pumpAndSettle();
     //     await tester.tap(find.text('Statistics'));
     //     await tester.pumpAndSettle();
-    //     await tester.tap(find.text('Exercises'));
-    //     await tester.pumpAndSettle();
-    //     await tester.pumpAndSettle(const Duration(seconds: 8));
-    //     await tester.ensureVisible(find.byKey(const Key('exercises_list')));
+    //     await tester.pumpAndSettle(const Duration(seconds: 17));
+    //     await tester
+    //         .ensureVisible(find.byKey(const Key('burned_calories_chart')));
     //     await tester.pumpAndSettle();
     //     print('test executed in ${stopwatch.elapsed}');
     //   },
     // );
+
+    testWidgets(
+      'display exercises',
+      (tester) async {
+        final stopwatch = Stopwatch()..start();
+        await startApp(tester);
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byKey(const Key('login-field')), 'admin');
+        await tester.pumpAndSettle();
+        await tester.enterText(
+            find.byKey(const Key('password-field')), 'Strong2137');
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Login'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Statistics'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Exercises'));
+        await tester.pumpAndSettle();
+        await tester.pumpAndSettle(const Duration(seconds: 15));
+        await tester.ensureVisible(find.byKey(const Key('exercises_list')));
+        await tester.pumpAndSettle();
+        print('test executed in ${stopwatch.elapsed}');
+      },
+    );
   });
 }
