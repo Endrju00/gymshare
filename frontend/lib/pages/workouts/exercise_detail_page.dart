@@ -77,12 +77,12 @@ class ExerciseDetailPage extends StatelessWidget {
                         SizedBox(
                           height: 100,
                           child: Row(children: [
-                            Expanded(
+                            const Expanded(
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.end,
-                                children: const [
+                                children: [
                                   Text(
                                     'Exercise type',
                                     style: TextStyle(

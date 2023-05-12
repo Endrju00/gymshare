@@ -334,12 +334,12 @@ class _WorkoutDetailPageState extends State<WorkoutDetailPage> {
                           height: 130,
                           child: Row(
                             children: [
-                              Expanded(
+                              const Expanded(
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: const [
+                                  children: [
                                     Text(
                                       'Exercises',
                                       style: TextStyle(

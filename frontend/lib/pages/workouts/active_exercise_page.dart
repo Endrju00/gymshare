@@ -226,7 +226,7 @@ class _ActiveExercisePageState extends State<ActiveExercisePage> {
                             onPress: () {
                               addRecord();
                             },
-                            child: Row(children: const [
+                            child: const Row(children: [
                               SizedBox(width: 20),
                               Icon(Icons.add, color: primary),
                               SizedBox(width: 20),

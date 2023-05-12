@@ -154,7 +154,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                               true,
                                               widget.callback);
                                         },
-                                        child: Row(children: const [
+                                        child: const Row(children: [
                                           SizedBox(width: 20),
                                           Icon(Icons.flag_outlined,
                                               color: primary),
@@ -179,7 +179,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                               false,
                                               widget.callback);
                                         },
-                                        child: Row(children: const [
+                                        child: const Row(children: [
                                           SizedBox(width: 20),
                                           Icon(Icons.flag_outlined,
                                               color: tertiary60),

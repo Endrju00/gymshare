@@ -69,9 +69,9 @@ class _ExerciseHistoryPageState extends State<ExerciseHistoryPage> {
                 ),
               ),
             if (stats.isEmpty)
-              Column(
+              const Column(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   SizedBox(height: 80),
                   GymShareLogo(),
                   Text(

@@ -123,6 +123,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 15));
         await tester.ensureVisible(find.byKey(const Key('exercises_list')));
         await tester.pumpAndSettle();
+        // ignore: avoid_print
         print('test executed in ${stopwatch.elapsed}');
       },
     );

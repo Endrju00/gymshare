@@ -74,8 +74,8 @@ class _BurnedCaloriesPageState extends State<BurnedCaloriesPage> {
                 BarChartSample(
                     stats: stats, key: const Key('burned_calories_chart')),
               if (stats.isEmpty)
-                Column(
-                  children: const [
+                const Column(
+                  children: [
                     SizedBox(height: 80),
                     GymShareLogo(),
                     Text(

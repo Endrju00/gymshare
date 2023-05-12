@@ -28,10 +28,9 @@ class _TrainingPageState extends State<TrainingPage> {
       _apiResponse = await searchWorkouts(
           context, query, mounted, next ? _apiResponse.next : null);
       workouts.clear();
-      setState(() => {
-            workouts.addAll(List<Workout>.from(
+      setState(() => workouts.addAll(List<Workout>.from(
                 _apiResponse.results.map((w) => Workout.fromJson(w))))
-          });
+          );
     }
   }
 

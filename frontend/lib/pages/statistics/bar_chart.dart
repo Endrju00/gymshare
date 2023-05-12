@@ -51,9 +51,9 @@ class BarChartSampleState extends State<BarChartSample> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Row(
+              const Row(
                 mainAxisSize: MainAxisSize.min,
-                children: const <Widget>[
+                children: <Widget>[
                   GymShareLogo(size: 70),
                   SizedBox(
                     width: 10,
